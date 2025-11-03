@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 setlocal enabledelayedexpansion
 set count=0
 for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (
@@ -17,43 +18,60 @@ goto ffm
 
 :begin
 cls
+mode 80,40
+:menu
+call :penis
 ECHO Updates checked!
 ECHO Now that seems to be all good
-ECHO.
+echo For now there is only functionality for YT-DLP
+echo.
+echo You can always come back here by typing "menu"
+echo [Alternatively you can go "back" on an option]
+echo.
+:: ╚═╝╦║
 :tryagain1
 ECHO Do you want to extract audio(Will require FFMPEG)?
 ECHO [y/n]
 ECHO.
-set /p q1=
+set /p q1=">> "
 if "%q1%" == "y" goto audio
-if "%q1%" == "" cls & echo there seems to be an error try again & echo. & goto tryagain1
+if "%q1%" == "menu" goto menu
+if "%q1%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
+goto tryagain2
+
 :tryagain2
-ECHO Do you want THE best quality(Will require FFMPEG)[1](for best webm)[1w] or good enough[2]?
+ECHO Do you want THE best quality(Will require FFMPEG)
+ECHO [1] (for best webm)[1w] or Good enough[2]?
+ECHO.
 ECHO [1,1w,2]
-set /p q2=
+ECHO.
+set /p q2=">> "
+if "%q2%" == "menu" cls & echo. & goto menu
 if "%q2%" == "back" cls & echo. & goto tryagain1
 if "%q2%" == "old1" set quality="-f bestvideo+bestaudio/best"
 if "%q2%" == "1" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
 if "%q2%" == "1w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
 if "%q2%" == "2" set quality="-f best"
-if "%q2%" == "" cls & echo there seems to be an error try again & echo. & goto tryagain2
+if "%q2%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain2
 goto final
 
 :audio
 ECHO.
-echo insert the link to download, alternatively you can just paste the ID of the youtube video
-echo after that this window will close
-SET /p op=
+echo Insert the link to download
+echo [Alternatively you can just paste the ID of the youtube video]
+SET /p op=">> "
+if "%op%" == "menu" cls & echo. & goto menu
 if "%op%" == "back" cls & echo. & goto tryagain1
 if "%op%" == "" cls & echo there seems to be an error try again & goto audio
 yt-dlp --cookies-from-browser firefox -x --audio-format mp3 %op%
 goto end
 
 :final
-echo.
-echo insert the link to download, alternatively you can just paste the ID of the youtube video
-echo after that this window will close
-SET /p op=
+ECHO.
+echo Insert the link to download
+echo [Alternatively you can just paste the ID of the youtube video]
+SET /p op=">> "
+if "%op%" == "menu" cls & echo. & goto menu
 if "%op%" == "back" cls & echo. & goto tryagain2
 if "%op%" == "" cls & echo there seems to be an error try again & goto final
 yt-dlp --cookies-from-browser firefox --embed-thumbnail %quality% %op% 
@@ -78,9 +96,14 @@ goto ffm
 echo.
 echo.
 echo.
-echo thanks  for using me :3
-pause
-exit
+echo thanks for using me :3
+echo.
+echo if there is more you wish to do say you can go back by saying "menu" otherwise just press enter
+set /p exit=">> "
+if not "%exit%" == "menu" exit 
+:: powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'Hello world', 'This is called from a batch script.', [System.Windows.Forms.ToolTipIcon]::None)}"
+cls & echo. & goto menu
+
 
 :help
 ECHO.
@@ -109,3 +132,19 @@ echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/
 ECHO.
 pause
 exit
+
+
+:penis
+for /F "delims=" %%A in ('echo prompt $E^| cmd') do set "ESC=%%A"
+echo.
+echo.
+echo %ESC%[36m	      _     _ _               _   _      _                 %ESC%[0m
+echo %ESC%[36m	     ^| ^|   (_) ^|             ^| ^| ^| ^|    ^| ^|                %ESC%[0m
+echo %ESC%[36m	     ^| ^|    _^| ^|_   _  __ _  ^| ^|_^| ^| ___^| ^|_ __   ___ _ __ %ESC%[0m
+echo %ESC%[36m	     ^| ^|   ^| ^| ^| ^| ^| ^|^/ _` ^| ^|  _  ^|^/ _ ^\ ^| '_ ^\ ^/ _ ^\ '__^|%ESC%[0m
+echo %ESC%[36m	     ^| ^|___^| ^| ^| ^|_^| ^| (_^| ^| ^| ^| ^| ^|  __^/ ^| ^|_) ^|  __^/ ^|   %ESC%[0m
+echo %ESC%[36m	     ^\_____^/_^|_^|^\__, ^|^\__,_^| ^\_^| ^|_^/^\___^|_^| .__^/ ^\___^|_^|   %ESC%[0m
+echo %ESC%[36m	                 __^/ ^|                    ^| ^|              %ESC%[0m
+echo %ESC%[36m	                ^|___^/                     ^|_^|       %ESC%[0m
+echo.
+echo.
