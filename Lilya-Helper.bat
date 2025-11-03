@@ -5,12 +5,13 @@ for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (
     set /a count+=1
     set ffm[!count!]=%%x
 )
+if "%ffm[1]%" == "no" goto begin
 TITLE Hai KayDee I'm here to help
 if not exist yt-dlp.exe goto reminder
 echo hi KayDee :3
 echo i will check for updates first
 yt-dlp -U
-if "%ffm[1]%" == "no" goto begin
+
 if exist ffmpeg.exe goto begin
 goto ffm
 
@@ -19,37 +20,49 @@ cls
 ECHO Updates checked!
 ECHO Now that seems to be all good
 ECHO.
+:tryagain1
 ECHO Do you want to extract audio(Will require FFMPEG)?
 ECHO [y/n]
 ECHO.
 set /p q1=
 if "%q1%" == "y" goto audio
-ECHO. 
-ECHO Do you want THE best quality(Will require FFMPEG)[1] or good enough[2]?
-ECHO [1,2]
+if "%q1%" == "" cls & echo there seems to be an error try again & echo. & goto tryagain1
+:tryagain2
+ECHO Do you want THE best quality(Will require FFMPEG)[1](for best webm)[1w] or good enough[2]?
+ECHO [1,1w,2]
 set /p q2=
-if "%q2%" == "1" set quality="-f bestvideo+bestaudio/best"
+if "%q2%" == "back" cls & echo. & goto tryagain1
+if "%q2%" == "old1" set quality="-f bestvideo+bestaudio/best"
+if "%q2%" == "1" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
+if "%q2%" == "1w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
 if "%q2%" == "2" set quality="-f best"
+if "%q2%" == "" cls & echo there seems to be an error try again & echo. & goto tryagain2
 goto final
 
 :audio
 ECHO.
-echo insert the link with whatever options you may need
+echo insert the link to download, alternatively you can just paste the ID of the youtube video
 echo after that this window will close
 SET /p op=
+if "%op%" == "back" cls & echo. & goto tryagain1
+if "%op%" == "" cls & echo there seems to be an error try again & goto audio
 yt-dlp --cookies-from-browser firefox -x --audio-format mp3 %op%
 goto end
 
 :final
-echo insert the link with whatever options you may need
+echo.
+echo insert the link to download, alternatively you can just paste the ID of the youtube video
 echo after that this window will close
 SET /p op=
-yt-dlp --cookies-from-browser firefox %quality% %op% 
+if "%op%" == "back" cls & echo. & goto tryagain2
+if "%op%" == "" cls & echo there seems to be an error try again & goto final
+yt-dlp --cookies-from-browser firefox --embed-thumbnail %quality% %op% 
 goto end
 
 :ffm
 ECHO you may need to have FFMPEG to be able to do certain actions, for best quality and extracting audio
 ECHO Open this link to download latest version: https://github.com/GyanD/codexffmpeg/releases
+ECHO Remember to install the "full_build" release
 ECHO after installing ffmpeg put all the programs in the "bin" inside the same folder that resides the yt-dlp
 ECHO.
 ECHO if you have ffmpeg installed say "yes" or "no"
