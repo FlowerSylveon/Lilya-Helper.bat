@@ -6,48 +6,58 @@ for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (
     set ffm[!count!]=%%x
 )
 TITLE Hai KayDee I'm here to help
+if not exist yt-dlp.exe goto reminder
 echo hi KayDee :3
 echo i will check for updates first
 yt-dlp -U
-cls
-if "%ffm[1]%" == "yes" goto begin
+if "%ffm[1]%" == "no" goto begin
+if exist ffmpeg.exe goto begin
 goto ffm
 
 :begin
 cls
+ECHO Updates checked!
 ECHO Now that seems to be all good
 ECHO.
 ECHO Do you want to extract audio(Will require FFMPEG)?
 ECHO [y/n]
+ECHO.
 set /p q1=
-if "%q1%" == "y" set audio="-x --audio-format mp3"
-if "%q1%" == "n" set audio=
+if "%q1%" == "y" goto audio
 ECHO. 
 ECHO Do you want THE best quality(Will require FFMPEG)[1] or good enough[2]?
 ECHO [1,2]
 set /p q2=
-if "%q2%" == "2" set quality="-f best"
 if "%q2%" == "1" set quality="-f bestvideo+bestaudio/best"
+if "%q2%" == "2" set quality="-f best"
 goto final
+
+:audio
+ECHO.
+echo insert the link with whatever options you may need
+echo after that this window will close
+SET /p op=
+yt-dlp --cookies-from-browser firefox -x --audio-format mp3 %op%
+goto end
 
 :final
 echo insert the link with whatever options you may need
 echo after that this window will close
 SET /p op=
-yt-dlp --cookies-from-browser firefox %audio% %quality% %op% 
+yt-dlp --cookies-from-browser firefox %quality% %op% 
 goto end
 
 :ffm
-if "%ffm[1]%" == "yes" goto begin
-ECHO you may need to have FFMPEG to be able to do this as it needs to be re-encoded to mp3
+ECHO you may need to have FFMPEG to be able to do certain actions, for best quality and extracting audio
 ECHO Open this link to download latest version: https://github.com/GyanD/codexffmpeg/releases
 ECHO after installing ffmpeg put all the programs in the "bin" inside the same folder that resides the yt-dlp
 ECHO.
 ECHO if you have ffmpeg installed say "yes" or "no"
+ECHO if you are having problems installing ffmpeg or making it work say "help"(this works in the first prompt as well)
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
 set /p answer=
+if "%answer%" == "help" goto help
 for /d %%i in (%answer%) do @echo %answer%> C:\Lilya-Helper\ffm.txt
-@echo %ffm[1]%
 if "%answer%" == "yes" goto begin
 goto ffm
 
@@ -56,5 +66,33 @@ echo.
 echo.
 echo.
 echo thanks  for using me :3
+pause
+exit
+
+:help
+ECHO.
+ECHO You are having problems with making ffmpeg work or installing it
+ECHO "ffmpeg ffplay ffprobe" are the programs you need iniside the folder where yt-dlp resides
+ECHO check the ffmpeg folder and open the folder "bin"
+EChO if you are still having problems contact Minty Flur(The one who probably gave you the program :3 ehehe)
+ECHO.
+pause
+exit
+
+:reminder
+CLS
+ECHO.
+ECHO Hey this bat is not inside the folder where YT-DLP resides, please fix this
+ECHO This is kapi, she is judging you
+ECHO.
+echo           ^/^/__^/^/ 
+echo          ^/   -   ^\______________ 
+echo         ^/                        ^\ 
+echo        ^| Y                        ^\ 
+echo        ^ \____^/ ^|                  ^| 
+echo            __^/  ^\   ^/___    _     ^\ 
+echo           ^/^/___^/ ^| ^|    ^\   ^| ^\   ^/  
+echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/ 
+ECHO.
 pause
 exit
