@@ -1,5 +1,4 @@
 @echo off
-chcp 65001 >nul
 setlocal enabledelayedexpansion
 if not exist yt-dlp.exe goto reminder
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
@@ -27,7 +26,6 @@ echo.
 echo You can always come back here by typing "menu"
 echo [Alternatively you can go "back" on an option]
 echo.
-:: ╚═╝╦║
 :tryagain1
 ECHO Do you want to extract audio(Will require FFMPEG)?
 ECHO [y/n]
