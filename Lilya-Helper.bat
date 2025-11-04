@@ -10,7 +10,7 @@ if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
 if "%ffmp%" == "no" goto begin
 :one-start
 if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
-TITLE Lilya Helper Version 1.0
+TITLE Lilya Helper Version 1.1
 echo i will check for updates first
 yt-dlp --ignore-config -U
 
@@ -146,8 +146,9 @@ exit
 :reminder
 CLS
 :reminder1
-ECHO.
+ECHO
 ECHO Hey this file is not inside the folder where YT-DLP resides, please fix this
+ECHO This is a file tool to make yt-dlp easier to use for not tech-savvy people
 Echo It's recommended you make an standalone folder to put everything together
 ECHO This is kapi, she is judging you
 ECHO.
@@ -161,8 +162,9 @@ echo           ^/^/___^/ ^| ^|    ^\   ^| ^\   ^/
 echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/ 
 ECHO.
 ECHO You can type "link" to open the page to download YT-DLP
-echo remembber to get exactly "yt-dlp.exe"
 echo [It will open in your default browser]
+echo Or just copy this link https://github.com/yt-dlp/yt-dlp/releases/latest/
+echo remember to get exactly "yt-dlp.exe"
 set /p reminder=">> "
 if not "%reminder%" == "link" cls & echo there seems to be an error try again & goto reminder1
 call start https://github.com/yt-dlp/yt-dlp/releases/latest/ & goto reminder-final
@@ -173,13 +175,9 @@ pause
 :deprecated
 exit
 
-set count=0
-for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (
-    set /a count+=1
-    set ffm[!count!]=%%x
-)
-
-powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'Hello world', 'This is called from a batch script.', [System.Windows.Forms.ToolTipIcon]::None)}"
+:: set count=0
+:: for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (    set /a count+=1  &  set ffm[!count!]=%%x)
+exit
 
 :penis
 for /F "delims=" %%A in ('echo prompt $E^| cmd') do set "ESC=%%A"
