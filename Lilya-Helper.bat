@@ -1,34 +1,34 @@
 @echo off
 chcp 65001 >nul
+setlocal enabledelayedexpansion
 set count=0
 for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
-setlocal enabledelayedexpansion
 TITLE Lilya Helper Version 1.2v-beta
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
-if not exist yt-dlp.exe goto help-ytdlp
+	if not exist yt-dlp.exe goto help-ytdlp
 :zero-start
-if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
-set ffmp="C:\Lilya-Helper\ffm.txt"
-if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
-if "%ffmp[1]%" == "no" goto begin
-:one-start
-if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
+		if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
+		set ffmp="C:\Lilya-Helper\ffm.txt"
+		if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
+		if "%ffmp[1]%" == "no" goto begin
+	:one-start
+		if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
 TITLE Lilya Helper Version 1.2v-beta
 echo i will check for updates first
 set message="Updates checked"
 ::yt-dlp --ignore-config -U
 
-:begin
+	:begin
 cls
 mode 80,40
-:menu
+	:menu
 call :penis
 for /f "delims=" %%x in (C:\Lilya-Helper\cookies.txt) do set cookies=%%x
 ECHO 		             %message%
 ECHO 		      Now that seems to be all good
 echo               ^(For now there is only functionality for YT-DLP^)
 echo.
-:tryagain1
+	:tryagain1
 echo 			     Extra Options:
 echo        Menu: Come back here         ^| 	Back: goes back an option
 echo        Setting: Unavailable         ^| 	Help: Display Help menu
@@ -47,21 +47,21 @@ ECHO 		             [1^|2^|2w^|Audio]
 ECHO.
 set op=
 set /p op=">> "
-if "%op%" == "menu" cls & echo. & goto menu
-if "%op%" == "res" cls & echo. & goto begin
-if "%op%" == "back" cls & echo. & echo there is nothing to go back to & goto tryagain1
-if "%op%" == "setting" goto setting
-if "%op%" == "help" goto help
-if "%op%" == "spot2yt" goto spot2yt
-if "%op%" == "audio" goto audio
-if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
-if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
-if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
-if "%op%" == "1" set quality="-f best"
-if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
+	if "%op%" == "menu" cls & echo. & goto menu
+	if "%op%" == "res" cls & echo. & goto begin
+	if "%op%" == "back" cls & echo. & echo there is nothing to go back to & goto tryagain1
+	if "%op%" == "setting" goto setting
+	if "%op%" == "help" goto help
+	if "%op%" == "spot2yt" goto spot2yt
+	if "%op%" == "audio" goto audio
+	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
+	if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
+	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
+	if "%op%" == "1" set quality="-f best"
+	if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
 goto final
 
-:audio
+	:audio
 ECHO.
 echo Paste the media link to download
 echo [Alternatively you can just paste the ID of the youtube video]
@@ -73,7 +73,7 @@ if "%op%" == "" cls & echo there seems to be an error try again & goto audio
 yt-dlp --cookies-from-browser %cookies% -x --audio-format mp3 %op%
 goto end
 
-:final
+	:final
 ECHO.
 echo Paste the media link to download
 echo [Alternatively you can just paste the ID of the youtube video]
@@ -85,7 +85,7 @@ if "%op%" == "" cls & echo there seems to be an error try again & goto final
 yt-dlp --cookies-from-browser %cookies% %thumb% %quality% %op% 
 goto end
 
-:spot2yt
+	:spot2yt
 echo. 
 echo Paste the spotify link to download
 echo It can be Album or Singles
@@ -93,7 +93,7 @@ set /p link=">> "
 spot2yt.py %link%
 goto end
 
-:end
+	:end
 echo.
 echo.
 echo.
@@ -108,9 +108,9 @@ goto menu
 
 
 
-:setting
-CLS
-:setting1
+		:setting
+	CLS
+	:setting1
 call :penis
 echo.
 echo                            not implemented yet
@@ -118,15 +118,15 @@ echo      [Cookies] Set browser cookies ^| [Install] Install certain dependencie
 echo.
 set setting=
 set /p settings=">> "
-if "%settings%" == "travel" goto travel 
-if "%settings%" == "cookies" goto cookies 
-if "%settings%" == "install" goto install 
-if "%settings%" == "" cls &echo there seems to be an error try again&echo.& goto setting1
+	if "%settings%" == "travel" goto travel 
+	if "%settings%" == "cookies" goto cookies 
+	if "%settings%" == "install" goto install 
+	if "%settings%" == "" cls &echo there seems to be an error try again&echo.& goto setting1
 goto zero-start
 
-:cookies
-cls
-:cookies1
+		:cookies
+	cls
+	:cookies1
 call :penis
 title I am the Cookie Master, feed me your cookies
 echo.
@@ -137,51 +137,52 @@ echo brave, chrome, chromium, edge, firefox, opera, safari, vivaldi, whale.
 echo choose which one you prefer to get cookies from
 set cookies=
 set /p cookies1=">> "
-if "%cookies%" == "back" goto setting
-if "%cookies%" == "menu" cls & goto menu
-if "%cookies%" == ""  cls &echo there seems to be an error try again &echo.&goto cookies1
-for /d %%i in (%cookies%) do @echo %cookies%> C:\Lilya-Helper\cookies.txt
+	if "%cookies%" == "back" goto setting
+	if "%cookies%" == "menu" cls & goto menu
+	if "%cookies%" == ""  cls &echo there seems to be an error try again &echo.&goto cookies1
+	for /d %%i in (%cookies%) do @echo %cookies%> C:\Lilya-Helper\cookies.txt
 goto zero-start	
 
-:install
-echo What do you wish to install
-echo [Spot2yt] Uses spotify links to download albums^|music^|artist
-echo [FFMPEG] ffmpeg program
-echo.
-set /p inst=">> "
-if "%inst%" == "spot2yt" goto install-spot2yt
+		:install
+	echo What do you wish to install
+	echo [Spot2yt] Uses spotify links to download albums^|music^|artist
+	echo [FFMPEG] ffmpeg program
+	echo.
+	set /p inst=">> "
+		if "%inst%" == "spot2yt" goto install-spot2yt
 
-:install-spot2yt
-title Installing Spot2yt.py
-echo Downloading Spot2yt.py
-echo.
-curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
-if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
-echo.
-echo Installing requirements
-echo.
-python -m pip install -r requirements.txt
-del requirements.txt&del spot2yt.zip
-echo All done
-set message="Spot2yt.py Installed"
-goto begin
+	:install-spot2yt
+	title Installing Spot2yt.py
+	echo Downloading Spot2yt.py
+	echo.
+	curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
+	if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
+	echo.
+	echo Installing requirements
+	echo.
+	python -m pip install -r requirements.txt
+	del requirements.txt&del spot2yt.zip
+	echo All done
+	set message="Spot2yt.py Installed"
+	goto begin
 
-:install-ffmpeg
-title Installing FFMPEG
-echo.
-echo Downloading FFMPEG
-curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip & del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
+		:install-ffmpeg
+	title Installing FFMPEG
+	echo.
+	echo Downloading FFMPEG
+	curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip
+	del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
 
-:install-ffmpeg2
-echo %message% ^| You can restart the program now
-pause
+	:install-ffmpeg2
+	echo %message% ^| You can restart the program now
+	pause
 
-:Changelog
+	:Changelog
 echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo.&echo 
-:bug
+	:bug
 penis https://x.com/Minty_Flur/status/1982778266227245163
 
-:help
+	:help
 cls
 mode 40,20
 echo What do you need help with?
@@ -190,9 +191,9 @@ echo Type these to get to their help menu:
 echo [ffmpeg] [setting] [yt-dlp]
 echo type menu to go back at the start
 set /p help=">> "
-if "%help%" == "ffmpeg" goto help-ffmpeg
-if "%help%" == "setting" goto setting
-if "%help%" == "yt-dlp" goto help-ytdlp
+	if "%help%" == "ffmpeg" goto help-ffmpeg
+	if "%help%" == "setting" goto setting
+	if "%help%" == "yt-dlp" goto help-ytdlp
 
 :ffmpreg
 title This is your probably first time, please read below
@@ -220,7 +221,7 @@ if "%answer%" == "no" goto zero-start
 if "%answer%" == "yes" goto zero-start
 goto ffmpreg
 
-:help-ffmpeg
+	:help-ffmpeg
 cls
 mode 80,30
 echo.
@@ -236,26 +237,26 @@ ECHO            remember to get "full_build" and getting ffmpeg in the bin
 echo.
 set op=
 set /p op=">> "
-if "%op%" == "download" goto install-ffmpeg
-if "%op%" == "link" call start https://github.com/GyanD/codexffmpeg/releases/latest & set message="waiting for ffmpeg to be installed" & goto install-ffmpeg2
+	if "%op%" == "download" goto install-ffmpeg
+	if "%op%" == "link" call start https://github.com/GyanD/codexffmpeg/releases/latest & set message="waiting for ffmpeg to be installed" & goto install-ffmpeg2
 
-:help-ytdlp
-CLS
-mode 90,30
-:help-ytdlp-1
-ECHO.
-ECHO                             This batch has functionality with YT-DLP and cannot find yt-dlp
-ECHO                          This tool is used make yt-dlp easier to use and better functionality
-Echo                       It's recommended you make an standalone folder to put everything together
-ECHO                                 You can type "download" to directly download YT-DLP
-echo                                              Or just copy this link
-echo                                 https://github.com/yt-dlp/yt-dlp/releases/latest/
-echo                                        Remember to get exactly "yt-dlp.exe" 
-set /p help=">> "
-if "%help%" == "download" curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe > yt-dlp.exe
-if "%help%" == "link" call start https://github.com/yt-dlp/yt-dlp/releases/latest
-cls & echo there seems to be an error try again & goto help-ytdlp-1
-goto zero-start
+		:help-ytdlp
+	CLS
+	mode 90,30
+	:help-ytdlp-1
+	ECHO.
+	ECHO                             This batch has functionality with YT-DLP and cannot find yt-dlp
+	ECHO                          This tool is used make yt-dlp easier to use and better functionality
+	Echo                       It's recommended you make an standalone folder to put everything together
+	ECHO                                 You can type "download" to directly download YT-DLP
+	echo                                              Or just copy this link
+	echo                                 https://github.com/yt-dlp/yt-dlp/releases/latest/
+	echo                                        Remember to get exactly "yt-dlp.exe" 
+	set /p help=">> "
+		if "%help%" == "download" curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe > yt-dlp.exe
+		if "%help%" == "link" call start https://github.com/yt-dlp/yt-dlp/releases/latest
+	cls & echo there seems to be an error try again & goto help-ytdlp-1
+	goto zero-start
 
 
 :deprecated
