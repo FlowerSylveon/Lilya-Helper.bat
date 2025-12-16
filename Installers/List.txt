@@ -1,0 +1,3 @@
+[Deno]    Decomplicates JS for YT-DLP downloading process
+[Spot2yt] Uses spotify links to download albums^|music^|artist
+[FFMPEG]  FFMPEG program
