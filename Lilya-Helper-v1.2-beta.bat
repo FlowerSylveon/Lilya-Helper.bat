@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 	set count=0
-	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set vars[!count!]=%%x)
+	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
 TITLE Lilya Helper Version 1.2v-beta
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
 if not exist yt-dlp.exe goto help-ytdlp
@@ -10,7 +10,7 @@ if not exist yt-dlp.exe goto help-ytdlp
 			if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
 			set ffmp="C:\Lilya-Helper\ffm.txt"
 			if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
-			if "%vars[1]%" == "no" goto begin
+			if "%ffmp[1]%" == "no" goto begin
 		:one-start :real start of the program
 			if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
 	TITLE Lilya Helper Version 1.2v-beta
@@ -18,49 +18,48 @@ if not exist yt-dlp.exe goto help-ytdlp
 	set message="Updates checked"
 	::yt-dlp --ignore-config -U
 
-:begin
-	cls
-	mode 80,40
-:menu :initial menu
-	mode 80,40
-	call :penis
-	for /f "delims=" %%x in (C:\Lilya-Helper\cookies.txt) do set cookies=%%x
-	ECHO 		             %message%
-	ECHO 		      Now that seems to be all good
-	echo               ^(For now there is only functionality for YT-DLP^)
-	echo.
-:tryagain1 :back option | error callback
-	echo 			     Extra Options:
-	echo        Menu: Come back here         ^| 	Back: goes back an option
-	echo        Setting: Unavailable         ^| 	Help: Display Help menu
-	echo        Changelog: Display Changes   ^| 	Bug: Goes to bug and issues page
-	if exist "spot2yt.py" echo 		      Spot2yt: Spotify Downloader
-	echo.
-	ECHO 			Here some options for you
-	echo 		    Some require ffmpeg [FPG prefix]
-	ECHO 			      Good enough [1]
-	echo.
-	echo 		      [FPG] Best Quality(MP4) [2]
-	echo 		     [FPG] Best Quality(WEBM) [2w]
-	echo 		  [FPG] Audio Extraction(MP3) [audio]
-	ECHO.
-	ECHO 		             [1^|2^|2w^|Audio]
-	ECHO.
-	set op=
-	set /p op=">> "
-		if "%op%" == "menu" cls & echo. & goto menu
-		if "%op%" == "res" cls & echo. & goto begin
-		if "%op%" == "back" cls & echo. & echo there is nothing to go back to & goto tryagain1
-		if "%op%" == "setting" goto setting
-		if "%op%" == "help" goto help
-		if "%op%" == "spot2yt" goto spot2yt
-		if "%op%" == "audio" goto audio
-		if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
-		if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
-		if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
-		if "%op%" == "1" set quality="-f best"
-		if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
-	goto final
+	:begin
+cls
+mode 80,40
+	:menu :initial menu
+call :penis
+for /f "delims=" %%x in (C:\Lilya-Helper\cookies.txt) do set cookies=%%x
+ECHO 		             %message%
+ECHO 		      Now that seems to be all good
+echo               ^(For now there is only functionality for YT-DLP^)
+echo.
+	:tryagain1 :back option | error callback
+echo 			     Extra Options:
+echo        Menu: Come back here         ^| 	Back: goes back an option
+echo        Setting: Unavailable         ^| 	Help: Display Help menu
+echo        Changelog: Display Changes   ^| 	Bug: Goes to bug and issues page
+if exist "spot2yt.py" echo 		      Spot2yt: Spotify Downloader
+echo.
+ECHO 			Here some options for you
+echo 		    Some require ffmpeg [FPG prefix]
+ECHO 			      Good enough [1]
+echo.
+echo 		      [FPG] Best Quality(MP4) [2]
+echo 		     [FPG] Best Quality(WEBM) [2w]
+echo 		  [FPG] Audio Extraction(MP3) [audio]
+ECHO.
+ECHO 		             [1^|2^|2w^|Audio]
+ECHO.
+set op=
+set /p op=">> "
+	if "%op%" == "menu" cls & echo. & goto menu
+	if "%op%" == "res" cls & echo. & goto begin
+	if "%op%" == "back" cls & echo. & echo there is nothing to go back to & goto tryagain1
+	if "%op%" == "setting" goto setting
+	if "%op%" == "help" goto help
+	if "%op%" == "spot2yt" goto spot2yt
+	if "%op%" == "audio" goto audio
+	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
+	if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
+	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
+	if "%op%" == "1" set quality="-f best"
+	if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
+goto final
 
 	:audio
 ECHO.
@@ -86,26 +85,26 @@ if "%op%" == "" cls & echo there seems to be an error try again & goto final
 yt-dlp --cookies-from-browser %cookies% %thumb% %quality% %op% 
 goto end
 
-:spot2yt
-	echo. 
-	echo Paste the spotify link to download
-	echo It can be Album or Singles
-	set /p link=">> "
-	spot2yt.py %link%
-	goto end
+	:spot2yt
+echo. 
+echo Paste the spotify link to download
+echo It can be Album or Singles
+set /p link=">> "
+spot2yt.py %link%
+goto end
 
-:end
-	echo.
-	echo.
-	echo.
-	echo Thanks for using me :3
-	echo.
-	echo If there is more you wish to do you can go back by saying "menu" otherwise just press enter
-	set /p exit=">> "
-	if not "%exit%" == "menu" exit 
-	cls
-	echo. 
-	goto menu
+	:end
+echo.
+echo.
+echo.
+echo Thanks for using me :3
+echo.
+echo If there is more you wish to do you can go back by saying "menu" otherwise just press enter
+set /p exit=">> "
+if not "%exit%" == "menu" exit 
+cls
+echo. 
+goto menu
 
 		:setting
 	CLS
@@ -144,13 +143,17 @@ goto zero-start
 
 :install
 set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.bat/refs/heads/Dev/Installers"
+	echo What do you wish to install
+	echo [Spot2yt] Uses spotify links to download albums^|music^|artist
 	echo [FFMPEG] ffmpeg program
 	echo.
 	set /p inst=">> "
+		if "%inst%" == "deno" goto install-deno
 		if "%inst%" == "spot2yt" goto install-spot2yt
 
 	:install-spot2yt
-		title Installing Spot2y && echo Downloading Spot2yt
+		title Installing Spot2yt.py
+		echo Downloading Spot2yt.py
 		echo.
 		curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
 		if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
@@ -173,10 +176,17 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 			echo %message% ^| You can restart the program now
 		pause
 	
+	:install-deno
+		echo Installing Deno
+		curl -L %installerpath%/Deno.bat > Deno.bat
+		call Deno.bat
+		set message="Deno Installed"
+		del Deno.bat
+	goto begin
+	
 
 :Changelog
 echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo.&echo 
-pause
 
 	:bug
 penis https://x.com/Minty_Flur/status/1982778266227245163
@@ -190,7 +200,9 @@ echo Type these to get to their help menu:
 echo [ffmpeg] [setting] [yt-dlp]
 echo type menu to go back at the start
 set /p help=">> "
-goto %help%
+	if "%help%" == "ffmpeg" goto help-ffmpeg
+	if "%help%" == "setting" goto setting
+	if "%help%" == "yt-dlp" goto help-ytdlp
 
 :ffmpreg
 title This is your probably first time, please read below
@@ -213,7 +225,7 @@ ECHO If you have ffmpeg installed say "yes" or "no" if not
 ECHO If you are having problems installing ffmpeg or making it work say "help"[this works in the first prompt as well]
 set /p answer=">> "
 if "%answer%" == "help" goto help-ffmpeg
-for /d %%i in (%answer%) do @echo %answer%> %vars[1]%
+for /d %%i in (%answer%) do @echo %answer%> C:\Lilya-Helper\ffm.txt
 if "%answer%" == "no" goto zero-start
 if "%answer%" == "yes" goto zero-start
 goto ffmpreg
@@ -273,7 +285,6 @@ echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/
 ECHO.
 ::del "%~f0" && echo All done. I must exit! && pause > nul && exit
 ::install -U yt-dlp spotdl
-
 pause
 
 
