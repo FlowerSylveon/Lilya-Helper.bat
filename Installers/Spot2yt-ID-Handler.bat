@@ -31,5 +31,5 @@ setlocal enabledelayedexpansion
 		) else echo.
 	)) > "%SpotFinal%"
 	copy spot2yt-2.py spot2yt.py
-	del %finalFile% & del %outputFile% & del sample.py
+	del spot2yt-1.py & del spot2yt-2.py & del sample.py
 endlocal
