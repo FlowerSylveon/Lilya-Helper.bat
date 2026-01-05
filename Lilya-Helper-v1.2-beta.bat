@@ -122,9 +122,9 @@ set /p settings=">> "
 	if "%settings%" == "" cls &echo there seems to be an error try again&echo.& goto setting1
 goto zero-start
 
-		:cookies
-	cls
-	:cookies1
+:cookies
+cls
+:cookies1
 call :penis
 title I am the Cookie Master, feed me your cookies
 echo.
@@ -152,46 +152,47 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 		if "%inst%" == "spot2yt" goto install-spot2yt
 
 	:install-spot2yt
-		title Installing Spot2yt.py
-		echo Downloading Spot2yt.py
-		echo.
-		curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
-		if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
-		echo.
-		echo Installing requirements
-		echo.
-		python -m pip install -r requirements.txt
-		del requirements.txt&del spot2yt.zip
-		echo All done
-		set message="Spot2yt.py Installed"
-		goto begin
+	title Installing Spot2yt.py
+	echo Downloading Spot2yt.py
+	echo.
+	curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
+	if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
+	echo.
+	echo Installing requirements
+	echo.
+	python -m pip install -r requirements.txt
+	del requirements.txt&del spot2yt.zip
+	:install-spot2yt-ID
+	curl -L %installerpath%/Spot2yt-ID-Handler.bat
+	call Spot2yt-ID-Handler.bat
+	echo All done
+	set message="Spot2yt.py Installed"
+	del Spot2yt-ID-Handler.bat
+	goto begin
 
 	:install-ffmpeg
-		title Installing FFMPEG
-		echo.
-		echo Downloading FFMPEG
-		curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip
-		del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
-			:install-ffmpeg2
-			echo %message% ^| You can restart the program now
-		pause
+	title Installing FFMPEG
+	echo.
+	echo Downloading FFMPEG
+	curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip
+	del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
+		:install-ffmpeg2
+		echo %message% ^| You can restart the program now
+	pause
 	
 	:install-deno
-		echo Installing Deno
-		curl -L %installerpath%/Deno.bat > Deno.bat
-		call Deno.bat
-		set message="Deno Installed"
-		del Deno.bat
+	echo Installing Deno
+	curl -L %installerpath%/Deno.bat > Deno.bat
+	call Deno.bat
+	set message="Deno Installed"
+	del Deno.bat
 	goto begin
 	
 
 :Changelog
 echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo.&echo 
 
-	:bug
-penis https://x.com/Minty_Flur/status/1982778266227245163
-
-	:help
+:help
 cls
 mode 40,20
 echo What do you need help with?
@@ -266,27 +267,6 @@ set /p op=">> "
 		if "%help%" == "link" call start https://github.com/yt-dlp/yt-dlp/releases/latest
 	cls & echo there seems to be an error try again & goto help-ytdlp-1
 	goto zero-start
-
-
-:deprecated
-echo deprecated
-pause
-rem this is a bunch of stuff that was removed or deprecated
-ECHO This is kapi, she likes you
-ECHO.
-echo           ^/^/__^/^/ 
-echo          ^/   -   ^\______________ 
-echo         ^/                        ^\ 
-echo        ^| Y                        ^\ 
-echo        ^ \____^/ ^|                  ^| 
-echo            __^/  ^\   ^/___    _     ^\ 
-echo           ^/^/___^/ ^| ^|    ^\   ^| ^\   ^/  
-echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/ 
-ECHO.
-::del "%~f0" && echo All done. I must exit! && pause > nul && exit
-::install -U yt-dlp spotdl
-pause
-
 
 :penis
 setlocal
