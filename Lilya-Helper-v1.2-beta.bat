@@ -91,6 +91,8 @@ echo Paste the spotify link to download
 echo It can be Album or Singles
 set /p link=">> "
 spot2yt.py %link%
+echo.
+echo Check your Download folder
 goto end
 
 	:end
@@ -152,18 +154,12 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 		if "%inst%" == "spot2yt" goto install-spot2yt
 
 	:install-spot2yt
-	title Installing Spot2yt.py
 	echo Downloading Spot2yt.py
-	echo.
-	curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
-	if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
-	echo.
-	echo Installing requirements
-	echo.
-	python -m pip install -r requirements.txt
-	del requirements.txt&del spot2yt.zip
+	curl -L %installerpath%/Spot2yt-Installer.bat > Spot2yt-Installer.bat
+	call Spot2yt-Installer.bat
+	del Spot2yt-Installer.bat
 	:install-spot2yt-ID
-	curl -L %installerpath%/Spot2yt-ID-Handler.bat
+	curl -L %installerpath%/Spot2yt-ID-Handler.bat > Spot2yt-ID-Handler.bat
 	call Spot2yt-ID-Handler.bat
 	echo All done
 	set message="Spot2yt.py Installed"
@@ -172,7 +168,6 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 
 	:install-ffmpeg
 	title Installing FFMPEG
-	echo.
 	echo Downloading FFMPEG
 	curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip
 	del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
