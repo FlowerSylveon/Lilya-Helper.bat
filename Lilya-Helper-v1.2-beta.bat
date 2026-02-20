@@ -90,7 +90,7 @@ echo.
 echo Paste the spotify link to download
 echo It can be Album or Singles
 set /p link=">> "
-spot2yt.py %link%
+spot2yt.py %link% || python spot2yt.py %link%
 echo.
 echo Check your Download folder
 goto end
@@ -279,3 +279,4 @@ echo %ESC%[36m	                ^|___^/                     ^|_^|       %ESC%[0m
 echo.
 echo.
 endlocal
+
