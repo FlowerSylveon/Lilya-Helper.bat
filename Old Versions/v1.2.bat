@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 	set count=0
 	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
-TITLE Lilya Helper Version 1.2v-beta
+TITLE Lilya Helper Version 1.2v
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
 if not exist yt-dlp.exe goto help-ytdlp
 
