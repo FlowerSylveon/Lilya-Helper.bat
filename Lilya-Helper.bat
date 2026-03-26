@@ -1,34 +1,34 @@
 @echo off
-chcp 65001 >nul
 setlocal enabledelayedexpansion
-set count=0
-for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
+	set count=0
+	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
 TITLE Lilya Helper Version 1.2v-beta
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
-	if not exist yt-dlp.exe goto help-ytdlp
-:zero-start
-		if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
-		set ffmp="C:\Lilya-Helper\ffm.txt"
-		if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
-		if "%ffmp[1]%" == "no" goto begin
-	:one-start
-		if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
-TITLE Lilya Helper Version 1.2v-beta
-echo i will check for updates first
-set message="Updates checked"
-::yt-dlp --ignore-config -U
+if not exist yt-dlp.exe goto help-ytdlp
+
+		:zero-start :inital start
+			if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
+			set ffmp="C:\Lilya-Helper\ffm.txt"
+			if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
+			if "%ffmp[1]%" == "no" goto begin
+		:one-start :real start of the program
+			if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
+	TITLE Lilya Helper Version 1.2v-beta
+	echo i will check for updates first
+	set message="Updates checked"
+	yt-dlp --ignore-config -U
 
 	:begin
 cls
 mode 80,40
-	:menu
+	:menu :initial menu
 call :penis
 for /f "delims=" %%x in (C:\Lilya-Helper\cookies.txt) do set cookies=%%x
 ECHO 		             %message%
 ECHO 		      Now that seems to be all good
 echo               ^(For now there is only functionality for YT-DLP^)
 echo.
-	:tryagain1
+	:tryagain1 :back option | error callback
 echo 			     Extra Options:
 echo        Menu: Come back here         ^| 	Back: goes back an option
 echo        Setting: Unavailable         ^| 	Help: Display Help menu
@@ -56,7 +56,7 @@ set /p op=">> "
 	if "%op%" == "audio" goto audio
 	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
 	if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
-	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
+	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" & set thumb="--no-embed-thumbnail"
 	if "%op%" == "1" set quality="-f best"
 	if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
 goto final
@@ -82,7 +82,7 @@ SET /p op=">> "
 if "%op%" == "menu" cls & echo. & goto menu
 if "%op%" == "back" cls & echo. & goto tryagain1
 if "%op%" == "" cls & echo there seems to be an error try again & goto final
-yt-dlp --cookies-from-browser %cookies% %thumb% %quality% %op% 
+yt-dlp %thumb% --cookies-from-browser %cookies% %quality% %op% 
 goto end
 
 	:spot2yt
@@ -90,7 +90,9 @@ echo.
 echo Paste the spotify link to download
 echo It can be Album or Singles
 set /p link=">> "
-spot2yt.py %link%
+spot2yt.py %link% || python spot2yt.py %link%
+echo.
+echo Check your Download folder
 goto end
 
 	:end
@@ -105,8 +107,6 @@ if not "%exit%" == "menu" exit
 cls
 echo. 
 goto menu
-
-
 
 		:setting
 	CLS
@@ -124,9 +124,9 @@ set /p settings=">> "
 	if "%settings%" == "" cls &echo there seems to be an error try again&echo.& goto setting1
 goto zero-start
 
-		:cookies
-	cls
-	:cookies1
+:cookies
+cls
+:cookies1
 call :penis
 title I am the Cookie Master, feed me your cookies
 echo.
@@ -143,46 +143,51 @@ set /p cookies1=">> "
 	for /d %%i in (%cookies%) do @echo %cookies%> C:\Lilya-Helper\cookies.txt
 goto zero-start	
 
-		:install
+:install
+set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.bat/refs/heads/Dev/Installers"
 	echo What do you wish to install
 	echo [Spot2yt] Uses spotify links to download albums^|music^|artist
 	echo [FFMPEG] ffmpeg program
 	echo.
 	set /p inst=">> "
+		if "%inst%" == "deno" goto install-deno
 		if "%inst%" == "spot2yt" goto install-spot2yt
 
 	:install-spot2yt
-	title Installing Spot2yt.py
 	echo Downloading Spot2yt.py
-	echo.
-	curl -L https://github.com/masterofobzene/spot2yt/releases/download/1.0/spot2yt.zip > spot2yt.zip & tar -xf spot2yt.zip
-	if not exist "%userprofile%\AppData\Local\Programs\Python\Python313\Scripts\pip.exe" do (curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" & python get-pip.py & del get-pip.py)
-	echo.
-	echo Installing requirements
-	echo.
-	python -m pip install -r requirements.txt
-	del requirements.txt&del spot2yt.zip
+	curl -L %installerpath%/Spot2yt-Installer.bat > Spot2yt-Installer.bat
+	call Spot2yt-Installer.bat
+	del Spot2yt-Installer.bat
+	:install-spot2yt-ID
+	curl -L %installerpath%/Spot2yt-ID-Handler.bat > Spot2yt-ID-Handler.bat
+	call Spot2yt-ID-Handler.bat
 	echo All done
 	set message="Spot2yt.py Installed"
+	del Spot2yt-ID-Handler.bat
 	goto begin
 
-		:install-ffmpeg
+	:install-ffmpeg
 	title Installing FFMPEG
-	echo.
 	echo Downloading FFMPEG
 	curl -L https://github.com/GyanD/codexffmpeg/releases/download/8.0/ffmpeg-8.0-full_build.zip > ffmpeg-8.0-full_build.zip & ren "ffmpeg*.zip" "ffmpeg.zip" & tar -xf ffmpeg.zip
 	del ffmpeg.zip & rename ffmpeg-8.0-full_build ffmpeg & move ffmpeg\bin\ffmpeg.exe & move ffmpeg "C:\Lilya-Helper" & set message="ffmpeg installed" & goto install-ffmpeg2
-
-	:install-ffmpeg2
-	echo %message% ^| You can restart the program now
+		:install-ffmpeg2
+		echo %message% ^| You can restart the program now
 	pause
+	
+	:install-deno
+	echo Installing Deno
+	curl -L %installerpath%/Deno.bat > Deno.bat
+	call Deno.bat
+	set message="Deno Installed"
+	del Deno.bat
+	goto begin
+	
 
-	:Changelog
+:Changelog
 echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo.&echo 
-	:bug
-penis https://x.com/Minty_Flur/status/1982778266227245163
 
-	:help
+:help
 cls
 mode 40,20
 echo What do you need help with?
@@ -257,28 +262,6 @@ set /p op=">> "
 		if "%help%" == "link" call start https://github.com/yt-dlp/yt-dlp/releases/latest
 	cls & echo there seems to be an error try again & goto help-ytdlp-1
 	goto zero-start
-
-
-:deprecated
-echo deprecated
-pause
-rem this is a bunch of stuff that was removed or deprecated
-ECHO This is kapi, she likes you
-ECHO.
-echo           ^/^/__^/^/ 
-echo          ^/   -   ^\______________ 
-echo         ^/                        ^\ 
-echo        ^| Y                        ^\ 
-echo        ^ \____^/ ^|                  ^| 
-echo            __^/  ^\   ^/___    _     ^\ 
-echo           ^/^/___^/ ^| ^|    ^\   ^| ^\   ^/  
-echo                 ^/^/^/     ^/^/ ^/  ^/^/ ^/ 
-ECHO.
-::del "%~f0" && echo All done. I must exit! && pause > nul && exit
-::install -U yt-dlp spotdl
-:: ╚═╝╦║
-pause
-
 
 :penis
 setlocal
