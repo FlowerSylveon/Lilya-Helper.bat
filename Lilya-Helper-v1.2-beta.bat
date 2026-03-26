@@ -16,7 +16,7 @@ if not exist yt-dlp.exe goto help-ytdlp
 	TITLE Lilya Helper Version 1.2v-beta
 	echo i will check for updates first
 	set message="Updates checked"
-	::yt-dlp --ignore-config -U
+	yt-dlp --ignore-config -U
 
 	:begin
 cls
@@ -56,7 +56,7 @@ set /p op=">> "
 	if "%op%" == "audio" goto audio
 	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
 	if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
-	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" 
+	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" & set thumb="--no-embed-thumbnail"
 	if "%op%" == "1" set quality="-f best"
 	if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
 goto final
@@ -82,7 +82,7 @@ SET /p op=">> "
 if "%op%" == "menu" cls & echo. & goto menu
 if "%op%" == "back" cls & echo. & goto tryagain1
 if "%op%" == "" cls & echo there seems to be an error try again & goto final
-yt-dlp --cookies-from-browser %cookies% %thumb% %quality% %op% 
+yt-dlp %thumb% --cookies-from-browser %cookies% %quality% %op% 
 goto end
 
 	:spot2yt
@@ -279,4 +279,3 @@ echo %ESC%[36m	                ^|___^/                     ^|_^|       %ESC%[0m
 echo.
 echo.
 endlocal
-
