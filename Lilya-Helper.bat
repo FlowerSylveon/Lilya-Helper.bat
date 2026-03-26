@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 	set count=0
 	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
-TITLE Lilya Helper Version 1.2v
+TITLE Lilya Helper Version 1.2.1
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
 if not exist yt-dlp.exe goto help-ytdlp
 
@@ -16,6 +16,7 @@ if not exist yt-dlp.exe goto help-ytdlp
 	TITLE Lilya Helper Version 1.2v-beta
 	echo i will check for updates first
 	set message="Updates checked"
+	set changer="nuhuh"
 	::yt-dlp --ignore-config -U
 
 	:begin
@@ -45,6 +46,7 @@ echo 		  [FPG] Audio Extraction(MP3) [audio]
 ECHO.
 ECHO 		             [1^|2^|2w^|Audio]
 ECHO.
+	:displayer
 set op=
 set /p op=">> "
 	if "%op%" == "menu" cls & echo. & goto menu
@@ -52,6 +54,8 @@ set /p op=">> "
 	if "%op%" == "back" cls & echo. & echo there is nothing to go back to & goto tryagain1
 	if "%op%" == "setting" goto setting
 	if "%op%" == "help" goto help
+	if "%op%" == "changelog" goto changelog
+	if "%op%" == "bug" goto bug
 	if "%op%" == "spot2yt" goto spot2yt
 	if "%op%" == "audio" goto audio
 	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
@@ -60,6 +64,10 @@ set /p op=">> "
 	if "%op%" == "1" set quality="-f best"
 	if "%op%" == "" cls & call :penis & echo there seems to be an error try again & echo. & goto tryagain1
 goto final
+
+:Changelog
+echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo ]
+goto displayer
 
 	:audio
 ECHO.
@@ -182,10 +190,6 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 	set message="Deno Installed"
 	del Deno.bat
 	goto begin
-	
-
-:Changelog
-echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo.&echo 
 
 :help
 cls
