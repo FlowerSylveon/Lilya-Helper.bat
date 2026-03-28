@@ -1,4 +1,4 @@
-set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.bat/refs/heads/Dev/Installers"
+set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.bat/refs/heads/main/Installers"
 
 echo What do you wish to install
 echo [Deno]    Decomplicates JS for YT-DLP downloading process
