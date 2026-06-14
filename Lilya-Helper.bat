@@ -144,7 +144,7 @@ echo Currently supported browsers are:
 echo brave, chrome, chromium, edge, firefox, opera, safari, vivaldi, whale.
 echo choose which one you prefer to get cookies from
 set cookies=
-set /p cookies1=">> "
+set /p cookies=">> "
 	if "%cookies%" == "back" goto setting
 	if "%cookies%" == "menu" cls & goto menu
 	if "%cookies%" == ""  cls &echo there seems to be an error try again &echo.&goto cookies1
