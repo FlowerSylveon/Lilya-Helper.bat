@@ -2,7 +2,7 @@ set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.
 
 echo What do you wish to install
 echo [Deno]    Decomplicates JS for YT-DLP downloading process
-echo [Spot2yt] Uses spotify links to download albums^|music^|artist
+echo [SpotDL] Uses spotify links to download albums^|music^|artist
 echo [FFMPEG]  FFMPEG program
 
 set /p inst=">> "
