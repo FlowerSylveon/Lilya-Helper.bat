@@ -2,49 +2,53 @@
 setlocal enabledelayedexpansion
 	set count=0
 	for /f "tokens=*" %%x in (C:\Lilya-Helper\ffm.txt) do (set /a count+=1 & set ffmp[!count!]=%%x)
-TITLE Lilya Helper Version 1.2.1
+SET title=Lilya Helper Version 1.2.3v
+TITLE %title%
+:: goto changelog
 if not exist "C:\Lilya-Helper" mkdir "C:\Lilya-Helper"
 if not exist yt-dlp.exe goto help-ytdlp
 
-		:zero-start :inital start
+		:zero-start        :inital start
 			if not exist "C:\Lilya-Helper\ffm.txt" == goto ffmpreg
 			set ffmp="C:\Lilya-Helper\ffm.txt"
 			if exist ffmpeg.exe set thumb="--embed-thumbnail" & goto one-start
 			if "%ffmp[1]%" == "no" goto begin
-		:one-start :real start of the program
+		:one-start         :real start of the program
 			if not exist "C:\Lilya-Helper\cookies.txt" goto cookies
-	TITLE Lilya Helper Version 1.2v-beta
+	TITLE %title%
 	echo i will check for updates first
 	set message="Updates checked"
 	set changer="nuhuh"
-	::yt-dlp --ignore-config -U
-
+	yt-dlp --ignore-config -U
+	
 	:begin
 cls
 mode 80,40
-	:menu :initial menu
+	:menu                  :initial menu
 call :penis
 for /f "delims=" %%x in (C:\Lilya-Helper\cookies.txt) do set cookies=%%x
 ECHO 		             %message%
 ECHO 		      Now that seems to be all good
 echo               ^(For now there is only functionality for YT-DLP^)
 echo.
-	:tryagain1 :back option | error callback
+	:tryagain1             :back option | error callback
 echo 			     Extra Options:
 echo        Menu: Come back here         ^| 	Back: goes back an option
 echo        Setting: Unavailable         ^| 	Help: Display Help menu
 echo        Changelog: Display Changes   ^| 	Bug: Goes to bug and issues page
-if exist "spot2yt.py" echo 		      Spot2yt: Spotify Downloader
 echo.
 ECHO 			Here some options for you
 echo 		    Some require ffmpeg [FPG prefix]
-ECHO 			      Good enough [1]
 echo.
-echo 		      [FPG] Best Quality(MP4) [2]
-echo 		     [FPG] Best Quality(WEBM) [2w]
+ECHO 			      Good enough [1]
+if exist "SpotDL.exe" echo 		        SpotDL: Spotify Downloader
+echo.
+echo 		  [FPG]     Best Quality(MP4) [2]
+echo 		  [FPG]    Best Quality(WEBM) [2w]
 echo 		  [FPG] Audio Extraction(MP3) [audio]
+echo 		  [FPG]    Music Convert(MP3) [music]
 ECHO.
-ECHO 		             [1^|2^|2w^|Audio]
+ECHO 		          [1^|2^|2w^|Audio^|Music]
 ECHO.
 	:displayer
 set op=
@@ -56,8 +60,9 @@ set /p op=">> "
 	if "%op%" == "help" goto help
 	if "%op%" == "changelog" goto changelog
 	if "%op%" == "bug" goto bug
-	if "%op%" == "spot2yt" goto spot2yt
+	if "%op%" == "spotdl" goto spotdl
 	if "%op%" == "audio" goto audio
+	if "%op%" == "music" goto music & set quality="-f 'ba[acodec^=mp3]/ba/b'"
 	if "%op%" == "old1" set quality="-f bestvideo+bestaudio/best"
 	if "%op%" == "2" set quality="-f bv*[ext=mp4]+ba[ext=m4a]/b"
 	if "%op%" == "2w" set quality="-f bv*[ext=webm]+ba[ext=webm]/best" & set thumb="--no-embed-thumbnail"
@@ -66,10 +71,22 @@ set /p op=">> "
 goto final
 
 :Changelog
-echo 1.2v&echo.&echo [&echo Implementation of changelog&echo.&echo Fixed some typos&echo.&echo Cleaner coding&echo.&echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.&echo Added Pages: Added "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-Spot2yt"&echo.&echo Improved Pages: ffmpeg, help, cookies, yt-dlp&echo.&echo Implementation of: Installation process, Spot2yt Script, Installation of YT-DLP at first execution &echo ]
+mode 100,20
+echo 1.2.3v&echo.
+echo  [
+echo Implementation of changelog&echo.
+echo Fixed some typos&echo.
+echo Cleaner coding&echo.
+echo Improved Menus: Start, Help, Cookies, Settings, YT-DLP&echo.
+echo Added Pages: "Music" "SpotDL" "Help-FFMPEG" "Help-Setting" "Help-yt-dlp" "Install" "Install-SpotDL"&echo.
+echo Improved Pages: ffmpeg, menu, help, cookies, yt-dlp&echo.
+echo Implementation of: Installation process, SpotDL, Installation of YT-DLP at first execution
+echo  ]
+echo.
+echo type "res" to go back
 goto displayer
 
-	:audio
+	:audio                 :Audio download
 ECHO.
 echo Paste the media link to download
 echo [Alternatively you can just paste the ID of the youtube video]
@@ -81,7 +98,29 @@ if "%op%" == "" cls & echo there seems to be an error try again & goto audio
 yt-dlp --cookies-from-browser %cookies% -x --audio-format mp3 %op%
 goto end
 
-	:final
+	:music                 :Music download
+ECHO.
+echo This is YT music download directly, for spotify downloads check the github
+echo This specifically downloads the video with thumbnail, metadata as a mp3
+echo Paste the media link to download
+echo [Alternatively you can just paste the ID of the youtube video]
+set op=
+SET /p op=">> "
+if "%op%" == "menu" cls & echo. & goto menu
+if "%op%" == "back" cls & echo. & goto tryagain1
+if "%op%" == "" cls & echo there seems to be an error try again & goto audio
+for /F "delims=" %%A in ('yt-dlp --cookies-from-browser %cookies% %op% --print title') do ( set "titled=%%A" )
+yt-dlp --cookies-from-browser %cookies% --embed-metadata %quality% -x --audio-format mp3 %op% -o "audio.mp3"
+yt-dlp --cookies-from-browser %cookies% --write-thumbnail %op% -o "thumbnail" --skip-download
+ffmpeg -y -v quiet -i "thumbnail.webp" -vf scale=1000:1000 -sws_flags neighbor "square.jpg"
+del thumbnail.webp
+ffmpeg -y -v quiet -i audio.mp3 -i square.jpg -map 0:a -map 1:v -metadata:s:v comment="Cover (front)" -id3v2_version 3 -c:a copy "%titled%.mp3"
+del square.jpg
+del audio.mp3
+goto end
+
+
+	:final                 :Normal Download
 ECHO.
 echo Paste the media link to download
 echo [Alternatively you can just paste the ID of the youtube video]
@@ -93,17 +132,18 @@ if "%op%" == "" cls & echo there seems to be an error try again & goto final
 yt-dlp %thumb% --cookies-from-browser %cookies% %quality% %op% 
 goto end
 
-	:spot2yt
+	:spotdl               :Spotify Download
 echo. 
 echo Paste the spotify link to download
 echo It can be Album or Singles
 set /p link=">> "
-spot2yt.py %link% || python spot2yt.py %link%
-echo.
-echo Check your Download folder
+if not exist Music mkdir Music
+set "origin=%cd%"
+cd music
+call %origin%\spotdl.exe %link%
 goto end
 
-	:end
+	:end                   :final Screen
 echo.
 echo.
 echo.
@@ -154,24 +194,20 @@ goto zero-start
 :install
 set installerpath="https://raw.githubusercontent.com/FlowerSylveon/Lilya-Helper.bat/refs/heads/Dev/Installers"
 	echo What do you wish to install
-	echo [Spot2yt] Uses spotify links to download albums^|music^|artist
+	echo [SpotDL] Uses spotify links to download albums^|music^|artist
 	echo [FFMPEG] ffmpeg program
 	echo.
 	set /p inst=">> "
 		if "%inst%" == "deno" goto install-deno
-		if "%inst%" == "spot2yt" goto install-spot2yt
+		if "%inst%" == "spotdl" goto install-spotdl
 
-	:install-spot2yt
-	echo Downloading Spot2yt.py
-	curl -L %installerpath%/Spot2yt-Installer.bat > Spot2yt-Installer.bat
-	call Spot2yt-Installer.bat
-	del Spot2yt-Installer.bat
-	:install-spot2yt-ID
-	curl -L %installerpath%/Spot2yt-ID-Handler.bat > Spot2yt-ID-Handler.bat
-	call Spot2yt-ID-Handler.bat
+	:install-spotdl
+	echo Downloading spotDL.exe
+	curl -L %installerpath%/SpotDL-Installer.bat > SpotDL-Installer.bat
+	call SpotDL-Installer.bat
+	del SpotDL-Installer.bat
 	echo All done
-	set message="Spot2yt.py Installed"
-	del Spot2yt-ID-Handler.bat
+	set message="SpotDL-Installer.bat Installed"
 	goto begin
 
 	:install-ffmpeg
